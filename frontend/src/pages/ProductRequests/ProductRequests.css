@@ -1,0 +1,57 @@
+.product-requests-container {
+  margin: 30px 30px;
+}
+
+.product-requests-display {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.product-display {
+  width: 300px;
+  place-self: center;
+}
+
+.requests-display h2 {
+  margin-bottom: 15px;
+}
+
+.requests-display .request {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid black;
+  padding: 30px 20px;
+  background-color: #d0cfd4;
+  border: 1px solid #757479;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.requests-display .request .buttons {
+  display: flex;
+  gap: 30px;
+  width: 40%;
+  justify-content: right;
+}
+
+.requests-display .request .buttons button {
+  background: transparent;
+  padding: 15px 15px;
+  outline: none;
+  cursor: pointer;
+  border-radius: 8px;
+  color: white;
+}
+
+.requests-display .request .buttons .approve {
+  background-color: green;
+  border: 1px solid green;
+}
+
+.requests-display .request .buttons .reject {
+  background-color: red;
+  border: 1px solid red;
+}
