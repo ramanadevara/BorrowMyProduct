@@ -20,7 +20,7 @@ const Navbar = ({ showLogin, setShowLogin }) => {
   return (
     <div className='navbar'>
       <Link to='/'>
-        <b className='logo'>BorrowMyProduct</b>
+        <b className='logo'>BorrowItNow</b>
       </Link>
 
       <ul className='menu-container'>

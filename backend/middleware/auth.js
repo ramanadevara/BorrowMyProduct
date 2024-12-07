@@ -21,9 +21,6 @@ const authMiddleware = async (req, res, next) => {
 
     console.log(req.body.userId)
 
-    //let fileName = `${req.file.fileName}`
-    //console.log(fileName)
-
     next()
   } catch (error) {
     console.log(error)

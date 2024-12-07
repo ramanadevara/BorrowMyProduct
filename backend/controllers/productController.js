@@ -6,8 +6,6 @@ import mongoose from "mongoose"
 const addProduct = async (req, res) => {
   try {
     let image_fileName = `${req.file.filename}`
-    console.log(image_fileName)
-    console.log(req.body.userId)
 
     const newProduct = new productModel({
       name: req.body.name,
@@ -16,6 +14,7 @@ const addProduct = async (req, res) => {
       category: req.body.category,
       owner: req.body.userId,
       requestedBy: [],
+      approvedUser: null,
     })
 
     await newProduct.save()
@@ -40,7 +39,6 @@ const getProducts = async (req, res) => {
 const addRequest = async (req, res) => {
   try {
     const product = await productModel.findById(req.body.id)
-    console.log(req.body)
     product.requestedBy.push(req.body.userId)
     await product.save()
 
@@ -61,14 +59,9 @@ const getUserProducts = async (req, res) => {
   try {
     const products = await productModel.find({})
     const userIdObject = new mongoose.Types.ObjectId(req.body.userId)
-    console.log("userProducts")
-
-    console.log(products)
-    console.log(req.body.userId)
     const userProducts = products.filter((product) =>
       product.owner.equals(userIdObject)
     )
-    console.log(userProducts)
     res.json({ success: true, userProducts })
   } catch (error) {
     console.log(error)
@@ -89,4 +82,55 @@ const getProduct = async (req, res) => {
   }
 }
 
-export { addProduct, getProducts, addRequest, getUserProducts, getProduct }
+const approveUser = async (req, res) => {
+  try {
+    const product = await productModel
+      .findById(req.body.productId)
+      .populate("requestedBy")
+
+    product.approvedUser = req.body.reqUserId
+
+    await product.save()
+
+    res.json({ success: true, message: "Product approved", product })
+  } catch (error) {
+    console.log(error)
+    res.json({ success: false, message: "Error" })
+  }
+}
+
+const checkApproved = (req, res) => {
+  if (req.body.userId === req.body.product.approvedUser) {
+    console.log("Success")
+    res.json({ success: true, message: "Success" })
+  } else {
+    res.json({ success: false, message: "Failure" })
+  }
+}
+
+const getOwnerDetails = async (req, res) => {
+  try {
+    console.log(req.body)
+    const user = await userModel.findById(req.body.owner)
+
+    const userDetails = {
+      name: user.name,
+      phone: user.phone,
+    }
+
+    res.json({ success: true, userDetails })
+  } catch (error) {
+    console.log(error)
+    res.json({ success: false, message: "Error" })
+  }
+}
+export {
+  addProduct,
+  getProducts,
+  addRequest,
+  getUserProducts,
+  getProduct,
+  approveUser,
+  checkApproved,
+  getOwnerDetails,
+}

@@ -7,6 +7,8 @@ const productSchema = mongoose.Schema({
   category: { type: String, required: true },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
   requestedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+  isApproved: { type: Boolean, default: false },
+  approvedUser: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
 })
 
 const productModel =

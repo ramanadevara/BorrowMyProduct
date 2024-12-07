@@ -1,6 +1,9 @@
 import {
   addProduct,
   addRequest,
+  approveUser,
+  checkApproved,
+  getOwnerDetails,
   getProduct,
   getProducts,
   getUserProducts,
@@ -26,4 +29,7 @@ productRouter.get("/get", getProducts)
 productRouter.post("/request", authMiddleware, addRequest)
 productRouter.get("/getUserProducts", authMiddleware, getUserProducts)
 productRouter.post("/getProduct", authMiddleware, getProduct)
+productRouter.post("/approve", authMiddleware, approveUser)
+productRouter.post("/check", authMiddleware, checkApproved)
+productRouter.post("/getOwner", authMiddleware, getOwnerDetails)
 export default productRouter

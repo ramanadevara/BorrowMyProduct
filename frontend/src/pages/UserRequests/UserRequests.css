@@ -35,7 +35,7 @@
 }
 
 .user-requests-list .user-request {
-  height: 120px;
+  height: 140px;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
@@ -44,7 +44,7 @@
 }
 
 .user-requests-list .user-request img {
-  width: 110px;
+  width: 100px;
   padding: 15px 15px;
 }
 
@@ -56,4 +56,18 @@
 .user-requests-list hr {
   border: 1px solid gray;
   width: 100%;
+}
+
+.success-container {
+  grid-column: 1 / -1; /* Span across all columns */
+  grid-row: 2; /* Place in the second row */
+  background-color: #a3c4dc;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }

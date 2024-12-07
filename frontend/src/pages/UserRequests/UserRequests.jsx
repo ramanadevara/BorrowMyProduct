@@ -7,17 +7,55 @@ const UserRequests = () => {
   const [products, setProducts] = useState([])
   const { url, token } = useContext(StoreContext)
 
+  const checkApproved = async (product) => {
+    const response = await axios.post(
+      url + "/api/product/check",
+      { product: product },
+      {
+        headers: { token },
+      }
+    )
+    console.log(response.data)
+
+    return response.data.success
+  }
+
   const getProducts = async () => {
     const response = await axios.post(url + "/api/user/requests", "", {
       headers: { token },
     })
 
     if (response.data.success) {
-      setProducts(response.data.requests)
+      const responseWithCheck = await Promise.all(
+        response.data.requests.map(async (product) => {
+          const isApproved = await checkApproved(product)
+
+          if (isApproved) {
+            const ownerDetails = await getOwnerDetails(product)
+            return { ...product, isApproved, ownerDetails }
+          }
+          return { ...product, isApproved }
+        })
+      )
+      console.log(responseWithCheck)
+      setProducts(responseWithCheck)
     } else {
       console.log(response.data)
       alert(response.data.message)
     }
+  }
+
+  const getOwnerDetails = async (product) => {
+    const response = await axios.post(url + "/api/product/getOwner", product, {
+      headers: { token },
+    })
+    const userDetails = { name: "", phone: "" }
+    if (response.data.success) {
+      userDetails.name = response.data.userDetails.name
+      userDetails.phone = response.data.userDetails.phone
+    }
+
+    return userDetails
   }
 
   useEffect(() => {
@@ -44,7 +82,25 @@ const UserRequests = () => {
                   <p>{product.name}</p>
                   <p>${product.price}</p>
                   <p>{product.category}</p>
-                  {/*{product.isApproved ? <p>Approved</p> : <p>Requested</p>}*/}
+                  {product.isApproved ? (
+                    <>
+                      <p>Approved</p>
+                    </>
+                  ) : (
+                    <p>Requested</p>
+                  )}
+                  {product.isApproved ? (
+                    <div className='success-container'>
+                      {" "}
+                      <p>
+                        Your product has been approved. Please contact{" "}
+                        {product.ownerDetails.name} at{" "}
+                        {product.ownerDetails.phone}
+                      </p>
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 {index === products.length - 1 ? <></> : <hr />}
               </>
